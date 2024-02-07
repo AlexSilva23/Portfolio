@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Page Title</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 36px;
+            font-weight: bold;
+        }
+        .dots {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #666;
+        }
+        iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+        }
+        .carousel-container {
+            overflow: hidden;
+            margin-top: 20px;
+            position: relative;
+        }
+        .carousel {
+            white-space: nowrap;
+            position: absolute;
+            animation: scroll 10s linear infinite;
+        }
+        .carousel img {
+            width: 200px;
+            height: auto;
+            margin-right: 10px;
+        }
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(calc(-100% + 800px)); /* Adjust carousel width */
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Mon Montesk</h1>
+    <div class="dots">...</div>
+    <p>Mon Montesk is an Android game where players 'adopt' a virtual monster and must take care of it. Feeding, bathing, and showing affection are some of the activities required to ensure the monster's well-being. If we treat our monster well, it will eventually ascend to the heaven; otherwise, it will meet its demise directly in hell. In Mon Montesk, the possibilities are endless.
+    </p>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/rbmkMHukpSg?si=S1o-ApBh-mid70uq" frameborder="0" allowfullscreen></iframe>
+    <div class="carousel">
+        <img src="/images/Games/CabritaCaganita/CabritaCaganita_Cover.png" alt="Image 1">
+        <img src="/images/Games/CabritaCaganita/CabritaCaganita_Cover.png" alt="Image 2">
+        <img src="/images/Games/CabritaCaganita/CabritaCaganita_Cover.png" alt="Image 3">
+        <img src="/images/Games/CabritaCaganita/CabritaCaganita_Cover.png" alt="Image 3">
+        <img src="/images/Games/CabritaCaganita/CabritaCaganita_Cover.png" alt="Image 3">
+        <img src="/images/Games/CabritaCaganita/CabritaCaganita_Cover.png" alt="Image 3">
+        <!-- Add more images here -->
+    </div>
+</div>
+
+<script>
+    var carousel = document.getElementById('carousel');
+    carousel.addEventListener('animationiteration', () => {
+        carousel.style.transform = 'translateX(0)';
+    });
+</script>
+
+</body>
+</html>
