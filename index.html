@@ -1,840 +1,1211 @@
 <!DOCTYPE html>
-<!--[if IE 8 ]><html class="no-js oldie ie8" lang="en"> <![endif]-->
-<!--[if IE 9 ]><html class="no-js oldie ie9" lang="en"> <![endif]-->
-<!--[if (gte IE 9)|!(IE)]><!-->
-<html class="no-js" lang="en"> <!--<![endif]-->
+<html lang="en" x-data="app()" :class="{'dark':dark}" class="scroll-smooth">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Alexandre Silva - Gameplay & Systems Programmer.">
+  <meta name="keywords" content="Alexandre Silva, gameplat programmer, portfolio, Unity C#, Unreal Engine">
+  <meta name="author" content="Alexandre">
+  <meta property="og:title" content="Alexandre - Gameplay & Systems Programmer">
+  <meta property="og:description" content="I turn ideas into interactive games.">
+  <meta property="og:type" content="website">
+  <!-- <meta property="og:url" content="https://eliott.dev"> -->
+  <title>Alexandre Silva - Gameplay & Systems Programmer</title>
 
-	<!--- basic page needs
-   ================================================== -->
-	<meta charset="utf-8">
-	<title>Alexandre Silva Portfolio</title>
-	<meta name="description" content="">
-	<meta name="author" content="">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap"
+    rel="stylesheet">
 
-	<!-- mobile specific metas
-   ================================================== -->
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { display: ['PT Sans', 'sans-serif'], body: ['DM Sans', 'sans-serif'] },
+          colors: { accent: '#0080FE', 'accent-light': '#005eb1' }
+        }
+      }
+    }
+  </script>
 
-	<!-- CSS
-   ================================================== -->
-	<link rel="stylesheet" href="css/base.css">
-	<link rel="stylesheet" href="css/main.css">
-	<link rel="stylesheet" href="css/vendor.css">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box
+    }
 
-	<!-- script
-   ================================================== -->
-	<script src="js/modernizr.js"></script>
-	<script src="js/pace.min.js"></script>
-	<script src="https://kit.fontawesome.com/acdedeeb8a.js" crossorigin="anonymous"></script>
+    html,
+    body {
+      font-family: 'DM Sans', sans-serif
+    }
 
-	<!-- favicons
-	================================================== -->
-	<!-- /header  <link rel="icon" type="image/png" href="favicon.png">-->
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: 'PT Sans', sans-serif
+    }
 
+    body {
+      transition: background-color .3s, color .3s
+    }
+
+    /* noise overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: .35;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E")
+    }
+
+    /* scrollbar */
+    ::-webkit-scrollbar {
+      width: 5px
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #0080FE;
+      border-radius: 99px
+    }
+
+    /* reveal on scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity .6s cubic-bezier(.4, 0, .2, 1), transform .6s cubic-bezier(.4, 0, .2, 1)
+    }
+
+    .reveal.in {
+      opacity: 1;
+      transform: none
+    }
+
+    .d1 {
+      transition-delay: .08s
+    }
+
+    .d2 {
+      transition-delay: .16s
+    }
+
+    .d3 {
+      transition-delay: .24s
+    }
+
+    .d4 {
+      transition-delay: .32s
+    }
+
+    /* nav underline animation */
+    .nl {
+      position: relative
+    }
+
+    .nl::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1.5px;
+      background: currentColor;
+      transition: width .22s cubic-bezier(.4, 0, .2, 1)
+    }
+
+    .nl:hover::after,
+    .nl.on::after {
+      width: 100%
+    }
+
+    .nl.on {
+      font-weight: 500
+    }
+
+    /* shimmer button */
+    .shimmer {
+      position: relative;
+      overflow: hidden
+    }
+
+    .shimmer::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: rgba(255, 255, 255, .18);
+      transform: skewX(-20deg);
+      transition: left .4s cubic-bezier(.4, 0, .2, 1)
+    }
+
+    .shimmer:hover::after {
+      left: 160%
+    }
+
+    /* photo frames */
+    .pf {
+      overflow: hidden;
+      background: #d4d4d8
+    }
+
+    .pf img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block
+    }
+
+    /* card hover */
+    .card-h {
+      transition: transform .28s cubic-bezier(.4, 0, .2, 1), border-color .18s
+    }
+
+    .card-h:hover {
+      transform: translateY(-4px)
+    }
+
+    /* skill tag */
+    .stag {
+      transition: border-color .18s
+    }
+
+    [x-cloak] {
+      display: none !important
+    }
+  </style>
 </head>
 
-<body id="top">
-
-	<!-- header 
-   ================================================== -->
-	<header>
-		<div class="row">
-
-			<div class="top-bar">
-				<a class="menu-toggle" href="#"><span>Menu</span></a>
-
-				<div class="logo">
-					<a href="index.html">logo</a>
-				</div>
-
-				<nav id="main-nav-wrap">
-					<ul class="main-navigation">
-						<li class="current"><a class="smoothscroll" href="#intro" title="">Home</a></li>
-						<li><a class="smoothscroll" href="#about" title="">About</a></li>
-						<li><a class="smoothscroll" href="#resume" title="">Resume</a></li>
-						<li><a class="smoothscroll" href="#portfolio" title="">Portfolio</a></li>
-					</ul>
-				</nav>
-			</div> <!-- /top-bar -->
-
-		</div> <!-- /row -->
-	</header> <!-- /header -->
-
-	<!-- intro section
-   ================================================== -->
-	<section id="intro">
-
-		<div class="intro-overlay"></div>
-
-		<div class="intro-content">
-			<div class="row">
-
-				<div class="col-twelve">
-
-					<h5>Hello, World.</h5>
-					<h1>I'm Alexandre Silva.</h1>
-
-					<p class="intro-position">
-						<span>Videogame development student</span>
-						<span>Programmer</span>
-					</p>
-
-					<a class="button stroke smoothscroll" href="#about" title="">More About Me</a>
-
-				</div>
-
-			</div>
-		</div> <!-- /intro-content -->
-
-		<ul class="intro-social">
-			<li><a href="https://alexsilva23.itch.io/" target="_blank"><i class="fa-brands fa-itch-io fa-lg"></i></a>
-			</li>
-			<li><a href="https://github.com/AlexSilva23" target="_blank"><i class="fa fa-github"></i></a></li>
-			<li><a href="https://www.linkedin.com/in/alexandre-silva-0818792b3/" target="_blank"><i
-						class="fa fa-linkedin"></i></a></li>
-			<li><a href="mailto: alexsilva16294@gmail.com"><i class="fa fa-envelope"></i></a></li>
-		</ul> <!-- /intro-social -->
-
-	</section> <!-- /intro -->
-
-
-	<!-- about section
-   ================================================== -->
-	<section id="about">
-
-		<div class="row section-intro">
-			<div class="col-twelve">
-
-				<h5>About</h5>
-				<h1>Let me introduce myself.</h1>
-
-				<div class="intro-info">
-
-					<img src="images/Image.png" alt="Profile Picture">
-
-					<p class="lead">Hey there! I'm Alexandre. Gaming has been my passion for as long as I can remember.
-						Around 2021, I dipped my toes into the world of game development for a school project, and it
-						was like unlocking a whole new level of excitement. Since then, I've been hooked, pouring my
-						energy into learning and creating. Now, I'm determined to transform this passion into a career.</p>
-				</div>
-
-			</div>
-		</div> <!-- /section-intro -->
-
-		<div class="row about-content">
-
-			<div class="col-six tab-full">
-
-				<!-- <h3>Profile</h3>
-				<p>Lorem ipsum Qui veniam ut consequat ex ullamco nulla in non ut esse in magna sint minim officia
-					consectetur nisi commodo ea magna pariatur nisi cillum.</p> -->
-
-				<ul class="info-list">
-					<li>
-						<strong>Fullname:</strong>
-						<span>Alexandre Marques Silva</span>
-					</li>
-					<li>
-						<strong>Birth Date:</strong>
-						<span>September 06, 2003</span>
-					</li>
-					<li>
-						<strong>Email:</strong>
-						<span>alexsilva16294@gmail.com</span>
-					</li>
-
-				</ul> <!-- /info-list -->
-
-			</div>
-
-			<div class="col-six tab-full">
-
-				<h3>Skills</h3>
-				<li>C#</li>
-				<li>Unity</li>
-				<li>Git</li>
-				<li>Gameplay programming</li>
-				<li>UI programming</li>
-
-				<!-- <ul class="skill-bars">
-					<li>
-						<div class="progress percent80"><span>80%</span></div>
-						<strong>C#</strong>
-					</li>
-					<li>
-						<div class="progress percent20"><span>20%</span></div>
-						<strong>‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ Unreal Engine</strong>
-					</li>
-					<li>
-						<div class="progress percent85"><span>85%</span></div>
-						<strong>Unity</strong>
-					</li>
-				</ul> <!-- /skill-bars -->
-
-			</div>
-
-		</div>
-
-		<div class="row button-section">
-			<div class="col-twelve">
-				<a href="CV_AlexandreSilva.pdf" target="_blank" title="Check CV" class="button button-primary">Check my
-					CV</a>
-			</div>
-		</div>
-
-	</section> <!-- /process-->
-
-
-	<!-- resume Section
-   ================================================== -->
-	<section id="resume" class="grey-section">
-
-		<div class="row section-intro">
-			<div class="col-twelve">
-
-				<h5>Resume</h5>
-				<h1>More of my credentials.</h1>
-
-				<p class="lead"></p>
-
-			</div>
-		</div> <!-- /section-intro-->
-
-		<!--
-   	<div class="row resume-timeline">
-
-   		<div class="col-twelve resume-header">
-
-   			<h2>Work Experience</h2>
-
-   		</div>
-
-   		<div class="col-twelve">
-
-   			<div class="timeline-wrap">
-
-   				<div class="timeline-block">
-
-	   				<div class="timeline-ico">
-	   					<i class="fa fa-graduation-cap"></i>
-	   				</div>
-
-	   				<div class="timeline-header">
-	   					<h3>UI Designer</h3>
-	   					<p>July 2015 - Present</p>
-	   				</div>
-
-	   				<div class="timeline-content">
-	   					<h4>Awesome Studio</h4>
-	   					<p>Lorem ipsum Occaecat do esse ex et dolor culpa nisi ex in magna consectetur nisi cupidatat laboris esse eiusmod deserunt aute do quis velit esse sed Ut proident cupidatat nulla esse cillum laborum occaecat nostrud sit dolor incididunt amet est occaecat nisi.</p>
-	   				</div>
-
-	   			</div> <!-- /timeline-block 
-
-	   			<div class="timeline-block">
-
-	   				<div class="timeline-ico">
-	   					<i class="fa fa-graduation-cap"></i>
-	   				</div>
-
-	   				<div class="timeline-header">
-	   					<h3>Front-end Developer</h3>
-	   					<p>July 2014 - June 2015</p>
-	   				</div>
-
-	   				<div class="timeline-content">
-	   					<h4>Super Cool Agency</h4>
-	   					<p>Lorem ipsum Occaecat do esse ex et dolor culpa nisi ex in magna consectetur nisi cupidatat laboris esse eiusmod deserunt aute do quis velit esse sed Ut proident cupidatat nulla esse cillum laborum occaecat nostrud sit dolor incididunt amet est occaecat nisi incididunt.</p>
-	   				</div>
-
-	   			</div> <!-- /timeline-block 
-
-	   			<div class="timeline-block">
-
-	   				<div class="timeline-ico">
-	   					<i class="fa fa-graduation-cap"></i>
-	   				</div>
-
-	   				<div class="timeline-header">
-	   					<h3>Web Designer</h3>
-	   					<p>May 2013 - June 2014</p>
-	   				</div>
-
-	   				<div class="timeline-content">
-	   					<h4>Great Designs Studio</h4>
-	   					<p>Lorem ipsum Occaecat do esse ex et dolor culpa nisi ex in magna consectetur nisi cupidatat laboris esse eiusmod deserunt aute do quis velit esse sed Ut proident cupidatat nulla esse cillum laborum occaecat nostrud sit dolor incididunt amet est occaecat nisi incididunt.</p>
-	   				</div>
-
-	   			</div> <!-- /timeline-block -->
-
-		</div> <!-- /timeline-wrap -->
-
-		</div> <!-- /col-twelve 
-   		
-   	</div> /resume-timeline
-   	
-		-->
-
-		<div class="row resume-timeline">
-
-			<div class="col-twelve resume-header">
-
-				<h2>Education</h2>
-
-			</div> <!-- /resume-header -->
-
-			<div class="col-twelve">
-
-				<div class="timeline-wrap">
-
-					<div class="timeline-block">
-
-						<div class="timeline-ico">
-							<i class="fa fa-briefcase"></i>
-						</div>
-
-						<div class="timeline-header">
-							<h3>Bachelor Degree</h3>
-							<p>September 2021 - Present</p>
-						</div>
-
-						<div class="timeline-content">
-							<h4>Universidade Lusófona do Porto</h4>
-							<p>Videogames and Multimedia Applications.</p>
-						</div>
-
-					</div> <!-- /timeline-block -->
-
-					<div class="timeline-block">
-
-						<div class="timeline-ico">
-							<i class="fa fa-briefcase"></i>
-						</div>
-
-						<div class="timeline-header">
-							<h3>Vocational course</h3>
-							<p>September 2018 - July 2021</p>
-						</div>
-
-						<div class="timeline-content">
-							<h4>Escola Secundária do Castêlo da Maia</h4>
-							<p>Computer systems management and programming.</p>
-						</div>
-
-					</div> <!-- /timeline-block -->
-				</div> <!-- /timeline-wrap -->
-
-			</div> <!-- /col-twelve -->
-
-		</div> <!-- /resume-timeline -->
-
-	</section> <!-- /features -->
-
-
-	<!-- Portfolio Section
-   ================================================== -->
-	<section id="portfolio">
-
-		<div class="row section-intro">
-			<div class="col-twelve">
-
-				<h5>Portfolio</h5>
-				<h1>Check Out Some of My Works.</h1>
-
-				<p class="lead">All the games presented below were developed in an academic context.</p>
-
-			</div>
-		</div> <!-- /section-intro-->
-
-		<div class="row portfolio-content">
-
-			<div class="col-twelve">
-
-				<!-- portfolio-wrapper -->
-				<div id="folio-wrapper" class="block-1-2 block-mob-full stack">
-
-					<div class="bgrid folio-item">
-						<div class="item-wrap">
-							<img src="images/Games//CampusConundrum/MainCC.png" alt="CampusConundrum">
-							<a href="#modal-01" class="overlay">
-								<div class="folio-item-table">
-									<div class="folio-item-cell">
-										<h3 class="folio-title">Campus Conundrum</h3>
-										<span class="folio-types">
-											pc 3d puzzle game
-										</span>
-									</div>
-								</div>
-							</a>
-						</div>
-					</div> <!-- /folio-item -->
-
-					<div class="bgrid folio-item">
-						<div class="item-wrap">
-							<img src="images/Games/Bergolis/Bergolis_Logo.png" alt="Clouds">
-							<a href="#modal-03" class="overlay">
-								<div class="folio-item-table">
-									<div class="folio-item-cell">
-										<h3 class="folio-title">Bergolis</h3>
-										<span class="folio-types">
-											Therapeutic vr game for pc
-										</span>
-									</div>
-								</div>
-							</a>
-						</div>
-					</div> <!-- /folio-item -->
-
-					<div class="bgrid folio-item">
-						<div class="item-wrap">
-							<img src="images/Games/MonMontesk/MM_lOGO.png" alt="Shutterbug">
-							<a href="#modal-02" class="overlay">
-								<div class="folio-item-table">
-									<div class="folio-item-cell">
-										<h3 class="folio-title">Mon Montesk</h3>
-										<span class="folio-types">
-											Virtual pet 2d mobile game
-										</span>
-									</div>
-								</div>
-							</a>
-						</div>
-					</div> <!-- /folio-item -->
-
-
-
-					<div class="bgrid folio-item">
-						<div class="item-wrap">
-							<img src="images/Games/StackBurger/StackBurger_Logo.png" alt="Beetle">
-							<a href="#modal-04" class="overlay">
-								<div class="folio-item-table">
-									<div class="folio-item-cell">
-										<h3 class="folio-title">Stack Burger</h3>
-										<span class="folio-types">
-											Food stacking 2d mobile game
-										</span>
-									</div>
-								</div>
-							</a>
-						</div>
-					</div> <!-- /folio-item -->
-
-					<div class="bgrid folio-item">
-						<div class="item-wrap">
-							<img src="images/Games/CabritaCaganita/CabritaCaganita_Logo.png" alt="Lighthouse">
-							<a href="#modal-05" class="overlay">
-								<div class="folio-item-table">
-									<div class="folio-item-cell">
-										<h3 class="folio-title">Cabrita Caganita</h3>
-										<span class="folio-types">
-											Gyroscope 3d mobile game
-										</span>
-									</div>
-								</div>
-							</a>
-						</div>
-					</div> <!-- /folio-item -->
-
-					<div class="bgrid folio-item">
-						<div class="item-wrap">
-							<img src="images/Games/JustJouste/JustJouste_Logo.png" alt="Salad">
-							<a href="#modal-06" class="overlay">
-								<div class="folio-item-table">
-									<div class="folio-item-cell">
-										<h3 class="folio-title">Just Joust</h3>
-										<span class="folio-types">
-											Couch co-op 3d pc game
-										</span>
-									</div>
-								</div>
-							</a>
-						</div>
-					</div> <!-- /folio-item -->
-
-					<!-- modal popups - begin
-	            ============================================================= -->
-					<div id="modal-01" class="popup-modal slider mfp-hide">
-
-						<div class="media">
-							<!-- Replace the image with the YouTube video iframe -->
-							<div class="video-container">
-								<iframe width="550" height="315"
-									src="https://www.youtube.com/embed/QCE81JyUKuo?si=tOEhl942h5vc_-hN"
-									title=" frameborder=" 0" allowfullscreen></iframe>
-							</div>
-						</div>
-
-						<div class="description-box">
-							<h4>Campus Conundrum</h4>
-							<p>Campus Conundrum is a 3D single-player first-person puzzle game that puts your quick
-								thinking to the test. Solve a variety of puzzles within a time limit to progress through
-								levels. The game keeps it simple with easy-to-grasp mechanics, and it explores a modern
-								theme—'Art made by AI.'</p>
-							<p>It currently features two primary rooms: one acts as a tutorial, guiding players through
-								the essential skills, while the other serves as the first test, demanding the
-								application of the competencies learned in the tutorial. Players are given a 20-minute
-								time limit to navigate and solve puzzles in this initial room. Failing to complete all
-								the puzzles and exit within the allotted time means restarting from the beginning.</p>
-							<p>It was made in almost three months for an academic project early 2023 and has since been
-								a finalist on 2023 Portugal's PlayStation Awards, nominated in the following:
-								<li><b>Most Innovative Game 2023;</b></li>
-								<li><b>Best Children's Game 2023;</b></li>
-								<li><b>usage of PlayStation® Technology Platforms 2023;</b></li>
-							</p>
-							<br>
-							<p> The game was created in Unity using C# programming language. Being the single programmer
-								of the game, I handled all aspects of its programming.
-								Here are some of the key elements I worked on:</p>
-							<li>Interaction with the environment/objects</li>
-							<li>Unlocking mechanisms for padlocks/codes</li>
-							<li>Linking between the two levels</li>
-							<li>Implementation of dialogues</li>
-							<br>
-							<div class="categories">Role: programmer</div>
-							<br>
-
-							<div class="video-container">
-								<iframe width="550" height="315"
-									src="https://www.youtube.com/embed/Hd_WFZ5rYf8?si=a72QCcf8Z_UB5Um3"
-									title=" frameborder=" 0" allowfullscreen></iframe>
-							</div>
-							<div class="media">
-								<img src="images/Games/CampusConundrum/Print_02.png" alt="" />
-								<img src="images/Games/CampusConundrum/Print_03.png" alt="" />
-								<img src="images/Games/CampusConundrum/Print_05.png" alt="" />
-							</div>
-						</div>
-
-
-
-						<div class="link-box">
-							<a href="https://vascoal00.itch.io/campus-conundrum" target="_blank">Try it!</a>
-							<a href="#" class="popup-modal-dismiss">Close</a>
-						</div>
-
-					</div> <!-- /modal-01 -->
-
-					<div id="modal-02" class="popup-modal slider mfp-hide">
-
-						<div class="media">
-							<!-- Replace the image with the YouTube video iframe -->
-							<div class="video-container">
-								<iframe width="550" height="315"
-									src="https://www.youtube.com/embed/rbmkMHukpSg?si=S1o-ApBh-mid70uq" frameborder="0"
-									allowfullscreen></iframe>
-							</div>
-						</div>
-
-						<div class="description-box">
-							<h4>Mon Montesk</h4>
-							<p>Mon Montesk is an Android game where players 'adopt' a virtual monster and must take care
-								of it. Feeding, bathing, and showing affection are some of the activities required to
-								ensure the monster's well-being. If we treat our monster well, it will eventually ascend
-								to the heaven; otherwise, it will meet its demise directly in hell. In Mon Montesk, the
-								possibilities are endless.</p>
-							<p> The game was created in Unity using C# programming language and currently, there are
-								three monsters available to play, with many others in the concept stage. Each monster
-								has its own unique story, appearance, and types of interactions.</p>
-							<br>
-							<p>Here are some of the key elements I worked in Mon Montesk:
-								<li>interactions with the monster</li>
-								<li>Connecting actions with the monster's stats</li>
-								<li>Minigames</li>
-								<li>Displaying trophies</li>
-								<li>Unity ADS and notifications</li>
-							</p>
-							<div class="categories">Role: programmer</div>
-
-							<div class="image-container">
-								<img src="images/Games/MonMontesk/Print_01.png" alt="">
-								<img src="images/Games/MonMontesk/Print_02.jpg" alt="">
-								<img src="images/Games/MonMontesk/Print_03.jpg" alt="">
-								<img src="images/Games/MonMontesk/Print_04.jpg" alt="">
-								<img src="images/Games/MonMontesk/Print_05.jpg" alt="">
-								<img src="images/Games/MonMontesk/Print_06.jpg" alt="">
-								<img src="images/Games/MonMontesk/Print_07.jpg" alt="">
-								<img src="images/Games/MonMontesk/Print_08.jpg" alt="">
-							</div>
-
-						</div>
-
-						<div class="link-box">
-							<a href="https://drive.google.com/file/d/1XtHfqAmwh79bn7hze-QaJ45jhioQnmaE/view"
-								target="_blank">Try it! </a>
-							<a href="#" class="popup-modal-dismiss">Close</a>
-						</div>
-
-					</div> <!-- /modal-02 -->
-
-
-
-					<div id="modal-03" class="popup-modal slider mfp-hide">
-
-						<div class="media">
-
-							<div class="video-container">
-								<iframe width="550" height="315"
-									src="https://www.youtube.com/embed/Yw7NpjIf2Iw?si=dUnnAhi6zqIP6gme"
-									title=" frameborder=" 0" allowfullscreen></iframe>
-							</div>
-						</div>
-
-						<div class="description-box">
-							<h4>Bergolis</h4>
-							<p>Bergolis is a first-person VR puzzle game that has been designed to
-								alleviate and cure phobias of various kinds and degrees. Biofeedback mechanisms are used
-								to make the experience more immersive. The aim is to combine a playful part of the games
-								with a therapeutic aspect that is essential for most people, whether they suffer from
-								phobias or not. To this end, there will be a series of puzzles where the player will
-								gradually be exposed to their phobia, always with the possibility of moving on to a safe
-								environment where they can relax and abstract themselves from what torments them.</p>
-
-							<p>The game was created in Unity using C# programming language.
-								Here are some of the key elements I worked on:</p>
-							<li>VR interactions</li>
-							<li>Pet AI</li>
-							<li>Scenario costumizations</li>
-							<li>UI programming</li>
-							<li>Meditative exercises</li>
-							<br>
-							<div class="categories">Role: programmer</div>
-
-							<br>
-
-							<div class="video-container">
-								<iframe width="550" height="315"
-									src="https://www.youtube.com/embed/3KQ1QtWBmPY?si=Vnqb-px-8H7m_vxc"
-									title=" frameborder=" 0" allowfullscreen></iframe>
-							</div>
-							<div class="video-container">
-								<iframe width="550" height="315"
-									src="https://www.youtube.com/embed/ufRpMlrZqlA?si=btq8o0SorvkdKUGm"
-									title=" frameborder=" 0" allowfullscreen></iframe>
-							</div>
-
-
-						</div>
-
-
-
-						<div class="link-box">
-							<!--<a href="http://www.behance.net">Details</a>-->
-							<a href="#" class="popup-modal-dismiss">Close</a>
-						</div>
-
-					</div> <!-- /modal-03 -->
-
-					<div id="modal-04" class="popup-modal slider mfp-hide">
-
-						<div class="media">
-							<!-- Replace the image with the YouTube video iframe -->
-							<div class="video-container">
-								<iframe width="550" height="315"
-									src="https://www.youtube.com/embed/OaSZPBoJ84w?si=Ojbzr95CkCtB1jOa" frameborder="0"
-									allowfullscreen></iframe>
-							</div>
-						</div>
-						<div class="description-box">
-							<h4>Stack Burger: The Food Tower Challenge</h4>
-							<p>Stack Burger: The Food Tower Challenge is a android game in which the player has to stack
-								the ingredients of a hamburger in order to complete it. There are two game modes
-								available, the infinite game mode in which the player strives to improve his highscore
-								by stacking as many ingredients as possible. And the leveled game mode, where the player
-								has to follow the recipes that are requested in order to complete the level. There are
-								15 levels available, with increasing difficulty. </p>
-
-							<br>
-
-							<p>The game was created in Unity using C# programming language. Being the single programmer
-								for the game, I handled all aspects of its programming. Here are some of the key
-								elements I worked on:</p>
-
-							<li>Main mechanic of dropping ingredients</li>
-							<li>Tracking of elements on each plate</li>
-							<li>Leaderboard in endless mode</li>
-
-							<br>
-
-							<div class="categories">Roles: Programmer</div>
-
-							<br>
-
-							<div class="image-container">
-								<img src="images/Games/StackBurger/print_01.png" alt="">
-								<img src="images/Games/StackBurger/print_02.png" alt="">
-								<img src="images/Games/StackBurger/print_03.png" alt="">
-								<img src="images/Games/StackBurger/print_04.png" alt="">
-							</div>
-						</div>
-
-						<div class="link-box">
-							<a href="https://alexsilva23.itch.io/stack-burger" target="_blank">Try it!</a>
-							<a href="#" class="popup-modal-dismiss">Close</a>
-						</div>
-
-					</div> <!-- /modal-04 -->
-
-					<div id="modal-05" class="popup-modal slider mfp-hide">
-
-						<div class="media">
-							<!-- Replace the image with the YouTube video iframe -->
-							<div class="video-container">
-								<iframe width="550" height="315"
-									src="https://www.youtube.com/embed/q0e89emQPoU?si=gABktlTIl5TXqLbp" frameborder="0"
-									allowfullscreen></iframe>
-							</div>
-						</div>
-
-						<div class="description-box">
-							<h4>Cabrita Caganita</h4>
-							<p>"Cabrita Caganita" is an exciting 3D mobile game that combines skillful challenges with a
-								touch of irreverence. Inspired by the classic "Monkey Ball," players will use the mobile
-								device's gyroscope functionality to control a ball with a rather unusual purpose. The
-								story begins with a goat in a sanitary situation that, through the pipes, descends into
-								the sewer environment, where the action unfolds.
-							</p>
-
-							<p>
-								The game was created in Unity using C# programming language. Here are some of the key
-								elements I worked on in Cabrita Caganita:
-							</p>
-
-							<li>Ball movement using gyroscope</li>
-							<li>Different balls, with different abilities</li>
-							<li>Checkpoints</li>
-							<li>Leaderboard</li>
-
-							<br>
-
-							<div class="categories">Roles: programmer</div>
-
-							<br>
-
-							<div class="media">
-								<img src="images/Games/CabritaCaganita/Print_01.jpg" alt="" />
-								<img src="images/Games/CabritaCaganita/Print_02.jpg" alt="" />
-								<img src="images/Games/CabritaCaganita/Print_03.jpg" alt="" />
-								<img src="images/Games/CabritaCaganita/Print_04.jpg" alt="" />
-							</div>
-						</div>
-
-						<div class="link-box">
-							<a href="http://www.behance.net">Details</a>
-							<a href="#" class="popup-modal-dismiss">Close</a>
-						</div>
-
-					</div> <!-- /modal-05 -->
-
-					<div id="modal-06" class="popup-modal slider mfp-hide">
-
-						<div class="media">
-							<!-- Replace the image with the YouTube video iframe -->
-							<div class="video-container">
-								<iframe width="550" height="315"
-									src="https://www.youtube.com/embed/jbNysYF3OlM?si=AGmBWFrpKnXW4ofi" frameborder="0"
-									allowfullscreen></iframe>
-							</div>
-						</div>
-
-						<div class="description-box">
-							<h4>Joust joust</h4>
-							<p>Just Joust is a hyper-casual battle micro-game where 2 players control the path of a
-								knight, simulating medieval jousting. Playing this game provides a quick and
-								entertaining experience lasting only a few seconds, with the winner enjoying a moment of
-								euphoria lasting an average of 2.5 seconds.
-							</p>
-
-							<p>
-								In Just Joust, players have 2 seconds to draw a path with their computer mouse in the
-								virtual arena, which their knight will follow when the round begins. After both players
-								draw their paths, they can watch as the knights traverse them, hoping that their
-								strategy proves superior to their opponent's.
-
-							</p>
-
-							<p>
-								Each match lasts for 10 seconds, and players can engage in as many rounds as they desire
-								using the retry button. The game also features in-game score tracking, fostering
-								friendly rivalry among players.
-							</p>
-
-							<p>
-
-								The game was created in Unreal Engine using blueprints. Being the single programmer for
-								the game, I handled all aspects of its programming. Here are some of the key elements I
-								worked on:
-
-							</p>
-							<li>Drawing splines and assigning them to the respective knight.</li>
-							<li>Detecting collision between the 'weapon' and the knight, determining the winner of the
-								battle.</li>
-							<li>Score tracking</li>
-							</p>
-
-							<br>
-
-							<div class="categories">Roles: programmer</div>
-
-							<br>
-
-							<div class="media">
-								<img padding: 5px; src="images/Games/JustJouste/print_01.png" alt="" />
-								<img padding: 5px; src="images/Games/JustJouste/print_02.png" alt="" />
-								<img padding: 5px; src="images/Games/JustJouste/print_03.png" alt="" />
-								<img padding: 5px; src="images/Games/JustJouste/print_04.png" alt="" />
-							</div>
-
-						</div>
-
-						<div class="link-box">
-							<a href="https://vascoal00.itch.io/just-joust" target="_blank">Try it!</a>
-							<a href="#" class="popup-modal-dismiss">Close</a>
-						</div>
-
-					</div> <!-- /modal-06 -->
-
-
-					<!-- modal popups - end
-	            ============================================================= -->
-
-				</div> <!-- /portfolio-wrapper -->
-
-			</div> <!-- /twelve -->
-
-		</div> <!-- /portfolio-content -->
-
-	</section> <!-- /portfolio -->
-
-	<!-- footer
-   ================================================== -->
-
-	<footer>
-		<div class="col-eight tab-full">
-			<div class="copyright">
-				<span>© Copyright 2018 </span>
-				<span>Design by <a href="http://www.styleshout.com/">styleshout</a></span>
-				<span>Distributed by <a href="https://themewagon.com/">themewagon</a></span>
-			</div>
-		</div>
-
-		<div id="go-top">
-			<a class="smoothscroll" title="Back to Top" href="#top"><i class="fa fa-long-arrow-up"></i></a>
-		</div>
-
-		</div> <!-- /row -->
-	</footer>
-
-	<div id="preloader">
-		<div id="loader"></div>
-	</div>
-
-	<!-- Java Script
-   ================================================== -->
-	<script src="js/jquery-2.1.3.min.js"></script>
-	<script src="js/plugins.js"></script>
-	<script src="js/main.js"></script>
+<body class="bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 antialiased">
+
+  <!-- ═══ NAV ═══ -->
+  <header class="fixed inset-x-0 top-0 z-50 transition-all duration-300"
+    :class="sc?'bg-white/90 dark:bg-zinc-950/90 backdrop-blur-md shadow-sm shadow-black/5':''">
+    <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between" aria-label="Main navigation">
+
+      <a href="#hero" class="font-display font-bold text-xl tracking-tight relative z-10">
+        <span class="text-zinc-900 dark:text-white">Alexandre</span><span class="text-accent">Silva</span>
+      </a>
+
+      <ul class="hidden md:flex items-center gap-8 text-sm" role="list">
+        <li><a href="#roles"
+            class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+            :class="s==='roles'?'on !text-zinc-900 dark:!text-white':''">Roles</a></li>
+        <li><a href="#work"
+            class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+            :class="s==='work'?'on !text-zinc-900 dark:!text-white':''">Work</a></li>
+        <li><a href="#about"
+            class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+            :class="s==='about'?'on !text-zinc-900 dark:!text-white':''">About</a></li>
+        <!--  <li><a href="#reviews" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='reviews'?'on !text-zinc-900 dark:!text-white':''">Reviews</a></li>-->
+        <!--<li><a href="#blog"    class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='blog'?'on !text-zinc-900 dark:!text-white':''">Blog</a></li>-->
+        <li><a href="#contact"
+            class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+            :class="s==='contact'?'on !text-zinc-900 dark:!text-white':''">Contact</a></li>
+      </ul>
+
+      <div class="flex items-center gap-3">
+        <!-- dark toggle -->
+        <button @click="dark=!dark"
+          class="w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
+          :aria-label="dark?'Light mode':'Dark mode'">
+          <svg x-show="!dark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+          </svg>
+          <svg x-show="dark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+          </svg>
+        </button>
+        <!-- hire me -->
+        <a href="#contact"
+          class="hidden md:inline-flex items-center gap-2 shimmer bg-accent text-white text-sm font-medium px-5 py-2 rounded-full hover:bg-accent-light transition-colors">
+          Hire me <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </a>
+        <!-- hamburger -->
+        <button @click="mm=!mm"
+          class="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800"
+          :aria-expanded="mm" aria-label="Toggle menu">
+          <svg x-show="!mm" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg x-show="mm" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- mobile menu -->
+    <div x-show="mm" x-cloak x-transition:enter="transition ease-out duration-200"
+      x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
+      x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0"
+      x-transition:leave-end="opacity-0 -translate-y-2"
+      class="md:hidden bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-900">
+      <ul class="flex flex-col px-6 py-5 gap-4 text-sm font-medium" role="list">
+        <li><a href="#roles" @click="mm=false"
+            class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Roles</a></li>
+        <li><a href="#work" @click="mm=false"
+            class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Work</a></li>
+        <li><a href="#about" @click="mm=false"
+            class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">About</a></li>
+        <li><a href="#contact" @click="mm=false"
+            class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Contact</a></li>
+        <li class="pt-2 border-t border-zinc-100 dark:border-zinc-900">
+          <a href="#contact" @click="mm=false"
+            class="inline-flex shimmer bg-accent text-white font-medium text-sm px-5 py-2.5 rounded-full">Hire me →</a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ═══ HERO ═══ -->
+    <section id="hero" class="relative min-h-screen flex items-center pt-16 overflow-hidden">
+      <div class="absolute top-1/4 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl pointer-events-none"
+        aria-hidden="true"></div>
+      <div
+        class="absolute bottom-1/4 left-0 w-64 h-64 bg-zinc-200/50 dark:bg-zinc-800/30 rounded-full blur-3xl pointer-events-none"
+        aria-hidden="true"></div>
+
+      <div class="relative z-10 max-w-6xl mx-auto px-6 py-24 w-full">
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+
+          <div>
+            <p class="reveal text-sm font-medium text-accent tracking-widest uppercase mb-4">Available for work</p>
+            <h1
+              class="reveal d1 font-display font-bold text-5xl md:text-6xl lg:text-7xl leading-[1.05] tracking-tight text-zinc-900 dark:text-white mb-6">
+              Hi, I'm <span class="text-accent">Alexandre</span>
+            </h1>
+            <p
+              class="reveal d2 text-lg md:text-xl text-zinc-500 dark:text-zinc-400 font-light leading-relaxed max-w-md mb-10">
+              <strong class="font-medium text-zinc-700 dark:text-zinc-300">Gameplay</strong> &
+              <strong class="font-medium text-zinc-700 dark:text-zinc-300">Systems Programmer</strong>. I transform
+              concepts into engaging gameplay, creating the mechanics and systems that bring games to life.
+            </p>
+            <div class="reveal d3 flex flex-wrap gap-4">
+              <a href="#work"
+                class="shimmer inline-flex items-center gap-2 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-medium px-7 py-3.5 rounded-full hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-colors text-sm">
+                View my work
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </a>
+              <a href="#contact"
+                class="inline-flex items-center gap-2 border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 font-medium px-7 py-3.5 rounded-full hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors text-sm">Get
+                in touch</a>
+            </div>
+            <div class="reveal d4 flex gap-8 mt-14 pt-8 border-t border-zinc-100 dark:border-zinc-900">
+              <div>
+                <p class="font-display font-bold text-3xl text-zinc-900 dark:text-white">7</p>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Projects done</p>
+              </div>
+              <div>
+                <p class="font-display font-bold text-3xl text-zinc-900 dark:text-white">2 years</p>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Of experience</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="reveal d2 flex justify-center md:justify-end">
+            <div class="relative w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96">
+              <div class="pf w-full h-full rounded-3xl">
+                <img src="images/PROFILE/ProfileImage.jfif" alt="Alexandre Silva - Gameplay & Systems Programmer"
+                  loading="eager">
+              </div>
+              <div
+                class="absolute -bottom-4 -left-4 bg-accent text-white font-display font-bold text-sm px-4 py-2.5 rounded-2xl shadow-lg">
+                Open to work</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ ROLES ═══ -->
+    <section id="roles" class="py-24 bg-zinc-50 dark:bg-zinc-900/40">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="mb-14">
+          <p class="reveal text-xs font-medium text-accent tracking-widest uppercase mb-3">What I do</p>
+          <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-zinc-900 dark:text-white">Roles</h2>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6">
+
+          <article
+            class="reveal d1 card-h group bg-white dark:bg-zinc-900 rounded-2xl p-8 border border-zinc-100 dark:border-zinc-800 hover:border-accent">
+            <div
+              class="w-12 h-12 flex items-center justify-center bg-orange-50 dark:bg-zinc-800 rounded-xl mb-6 group-hover:bg-accent/10 transition-colors">
+              <svg class="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 8.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M19.4 13.5a7.8 7.8 0 000-3l1.5-1.2-1.8-3.1-1.8.7a7.7 7.7 0 00-2.6-1.5L14.5 3h-5l-.3 2.4a7.7 7.7 0 00-2.6 1.5l-1.8-.7L3 9.3l1.5 1.2a7.8 7.8 0 000 3L3 14.7l1.8 3.1 1.8-.7a7.7 7.7 0 002.6 1.5l.3 2.4h5l.3-2.4a7.7 7.7 0 002.6-1.5l1.8.7 1.8-3.1-1.6-1.2z" />
+              </svg>
+            </div>
+            <h3 class="font-display font-bold text-xl text-zinc-900 dark:text-white mb-3">Systems programmer</h3>
+            <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Systems are the foundation of a game.
+              They connect
+              its different elements, make mechanics work together, and create the structure that brings the overall
+              experience to
+              life.</p>
+          </article>
+
+          <article
+            class="reveal d2 card-h group bg-zinc-900 dark:bg-zinc-800 rounded-2xl p-8 border border-zinc-800 hover:border-accent">
+            <div
+              class="w-12 h-12 flex items-center justify-center bg-zinc-800 dark:bg-zinc-700 rounded-xl mb-6 group-hover:bg-accent/20 transition-colors">
+              <svg class="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 14V8m0 0a3 3 0 100-6 3 3 0 000 6z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 14h8a2 2 0 012 2v1a2 2 0 01-2 2H8a2 2 0 01-2-2v-1a2 2 0 012-2z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v2m6-2v2" />
+              </svg>
+            </div>
+            <h3 class="font-display font-bold text-xl text-white mb-3">Gameplay programmer</h3>
+            <p class="text-sm text-zinc-400 leading-relaxed">Gameplay is where ideas become something the player can
+              actually
+              experience. I focus on creating responsive mechanics, interactions, and player experiences that feel
+              intuitive,
+              engaging, and fun to play.</p>
+          </article>
+
+          <article
+            class="reveal d3 card-h group bg-white dark:bg-zinc-900 rounded-2xl p-8 border border-zinc-100 dark:border-zinc-800 hover:border-accent">
+            <div
+              class="w-12 h-12 flex items-center justify-center bg-orange-50 dark:bg-zinc-800 rounded-xl mb-6 group-hover:bg-accent/10 transition-colors">
+              <svg class="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M7 7h13m0 0-4-4m4 4-4 4M17 17H4m0 0 4 4m-4-4 4-4" />
+              </svg>
+            </div>
+            <h3 class="font-display font-bold text-xl text-zinc-900 dark:text-white mb-3">Console Porting</h3>
+            <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Want to bring your game to a new
+              platform? Porting
+              makes it possible, adapting the game and its systems to deliver the same experience across different
+              platforms.</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ WORK ═══ -->
+    <section id="work" class="py-24">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-14">
+          <div>
+            <p class="reveal text-xs font-medium text-accent tracking-widest uppercase mb-3">Portfolio</p>
+            <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-zinc-900 dark:text-white">Selected
+              work</h2>
+          </div>
+          <a href="projects.html"
+            class="reveal d1 text-sm font-medium text-zinc-500 dark:text-zinc-400 hover:text-accent transition-colors self-start sm:self-auto nl">All
+            projects →</a>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+
+          <article
+            class="card-h reveal d1 group rounded-2xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 hover:border-accent md:row-span-2">
+            <div class="pf w-full h-64 md:h-80">
+              <img src="images/PocketMirror/PocketMirorHeader.png" alt="Pocket Mirror ~ GoldenerTraum (port)"
+                loading="lazy">
+            </div>
+            <div class="p-7">
+              <div class="flex flex-wrap gap-2 mb-4">
+                <span
+                  class="text-xs bg-orange-50 dark:bg-zinc-800 text-accent border border-orange-200 dark:border-zinc-700 px-3 py-1 rounded-full">Unity</span>
+                <span
+                  class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">C#</span>
+                <span
+                  class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">Port</span>
+              </div>
+              <a href="/projectPages/pocket-mirror-port.html">
+                <h3 class="font-display font-bold text-2xl text-zinc-900 dark:text-white mb-2">Pocket Mirror ~
+                  GoldenerTraum (port)</h3>
+              </a>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-5">Pocket Mirror ~ GoldenerTraum is
+                a story-driven horror RPG that follows a young girl trapped within a mysterious world shaped by
+                memories, dreams and hidden truths. Through exploration, puzzles and narrative-driven gameplay, players
+                uncover the secrets behind its surreal environments and the characters they encounter.
+              </p>
+              <br>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-5">
+                I joined the development roughly three months after the project began, when the conversion tool was
+                already
+                close to completion. The tool converted RPG Maker JSON data into Visual Scripting graphs using custom C#
+                nodes
+                developed specifically for the port. My contribution focused on implementing and refining these custom
+                nodes
+                to support the remaining game content. After conversion, I tested each room against the original game,
+                fixing
+                issues either through custom code or by adjusting the generated graphs.</p>
+              <a href="/projectPages/pocket-mirror-port.html"
+                class="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-900 dark:text-white nl">View in
+                detail <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                  aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg></a>
+            </div>
+          </article>
+
+          <article
+            class="card-h reveal d2 group rounded-2xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 hover:border-accent">
+            <div class="pf w-full h-48">
+              <img src="images/CampusConundrum/CCHeader.png" alt="Campus Conundrum" loading="lazy">
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap gap-2 mb-3">
+                <span
+                  class="text-xs bg-orange-50 dark:bg-zinc-800 text-accent border border-orange-200 dark:border-zinc-700 px-3 py-1 rounded-full">Unity</span>
+                <span
+                  class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">C#</span>
+              </div>
+              <a href="projectPages/campus-conundrum.html">
+                <h3 class="font-display font-bold text-xl text-zinc-900 dark:text-white mb-1.5">Campus Conundrum</h3>
+              </a>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4">Escape room game featuring an
+                AI-generated art-inspired visual style nad fourth-wall-breaking interactions designed to blur the line
+                between the game and the player.</p>
+              <a href="projectPages/campus-conundrum.html"
+                class="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-900 dark:text-white nl">View in
+                detail →</a>
+            </div>
+          </article>
+
+          <article
+            class="card-h reveal d3 group rounded-2xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 hover:border-accent">
+            <div class="pf w-full h-48">
+              <img src="images/bergolis/bergolisHeader.png" alt="Bergolis" loading="lazy">
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap gap-2 mb-3">
+                <span
+                  class="text-xs bg-orange-50 dark:bg-zinc-800 text-accent border border-orange-200 dark:border-zinc-700 px-3 py-1 rounded-full">Unity</span>
+                <span
+                  class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">C#</span>
+                <span
+                  class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">VR</span>
+              </div>
+              <a href="projectPages/bergolis.html">
+                <h3 class="font-display font-bold text-xl text-zinc-900 dark:text-white mb-1.5">Bergolis</h3>
+              </a>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4">Bergolis is a virtual reality
+                video game designed to assist in the treatment of phobias through exposure therapy and biofeedback.</p>
+              <a href="projectPages/bergolis.html">
+                <span class="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-900 dark:text-white nl">View
+                  in
+                  detail →</span>
+              </a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ ABOUT ═══ -->
+
+    <section id="about" class="py-24 bg-zinc-50 dark:bg-zinc-900/40">
+      <div class="max-w-6xl mx-auto px-6">
+
+        <!-- ═══ ABOUT INTRO ═══ -->
+        <div class="grid md:grid-cols-2 gap-12 lg:gap-20 items-center mb-24">
+
+          <!-- PROFILE IMAGE -->
+          <div class="reveal">
+            <div class="pf w-full aspect-square max-w-lg mx-auto rounded-3xl overflow-hidden">
+              <img src="images/PROFILE/ProfileImage.jfif" alt="Alexandre Silva" loading="lazy"
+                class="w-full h-full object-cover">
+            </div>
+          </div>
+
+          <!-- ABOUT TEXT -->
+          <div class="reveal d1">
+            <h2 class="font-display font-bold text-3xl md:text-4xl text-zinc-900 dark:text-white mb-6">
+              About Me
+            </h2>
+
+            <!-- <h2 class="font-display font-bold text-3xl md:text-4xl text-zinc-900 dark:text-white mb-6">
+              Game Programmer
+            </h2> -->
+
+            <div class="space-y-5 text-zinc-500 dark:text-zinc-400 leading-relaxed">
+              <p>
+                I got into game development during my final year of vocational
+                school, when I created a survival game in Unity as my year-long
+                final project. Combined with my passion for video games since
+                childhood, this project made me realize how much I enjoy bringing
+                ideas to life and creating something that other people can
+                experience and enjoy.
+              </p>
+
+              <p>
+                Since then, I’ve continued to grow as a programmer, working with
+                different technologies, game engines, and projects.
+              </p>
+
+              <p>
+                What I enjoy most about game development is creating playable,
+                interactive experiences. I’m particularly interested in gameplay,
+                mechanics, player interactions, and seeing how different systems
+                come together to shape the experience.
+              </p>
+
+              <p>
+                I enjoy finding clean and effective solutions, seeing my work
+                tested, and improving it through feedback. I work with Unity and
+                Unreal Engine and have also contributed to ports across different
+                platforms.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+
+        <!-- ═══ EXPERIENCE + EDUCATION ═══ -->
+        <div class="grid md:grid-cols-2 gap-12 lg:gap-20 mb-24">
+
+          <!-- EXPERIENCE -->
+          <div class="reveal d2">
+            <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-widest mb-6">
+              Experience
+            </p>
+
+            <div class="relative pl-6 border-l border-zinc-200 dark:border-zinc-700">
+
+              <div class="relative">
+                <span class="absolute -left-[29px] top-1.5 w-2.5 h-2.5 rounded-full bg-accent"></span>
+
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mb-2">
+                  <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white">
+                    Linovt
+                  </h3>
+
+                  <span class="text-xs font-medium text-accent">
+                    2025 — 2026
+                  </span>
+                </div>
+
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-4">
+                  Game Programmer
+                </p>
+
+                <ul class="flex flex-col gap-2 text-sm text-zinc-500 dark:text-zinc-400">
+                  <li class="flex gap-2">
+                    <span class="text-accent">•</span>
+                    <span>Developed gameplay systems and mechanics using Unity and Unreal Engine.</span>
+                  </li>
+
+                  <li class="flex gap-2">
+                    <span class="text-accent">•</span>
+                    <span>Implemented and maintained gameplay features across different projects.</span>
+                  </li>
+
+                  <li class="flex gap-2">
+                    <span class="text-accent">•</span>
+                    <span>Worked on debugging, optimization, and fixing gameplay-related issues.</span>
+                  </li>
+
+                  <li class="flex gap-2">
+                    <span class="text-accent">•</span>
+                    <span>Contributed to game ports for different platforms and hardware.</span>
+                  </li>
+
+                  <li class="flex gap-2">
+                    <span class="text-accent">•</span>
+                    <span>Collaborated with artists, designers, and other programmers during development.</span>
+                  </li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+
+
+          <!-- EDUCATION -->
+          <div class="reveal d3">
+            <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-widest mb-6">
+              Education
+            </p>
+
+            <div class="relative pl-6 border-l border-zinc-200 dark:border-zinc-700">
+
+              <div class="relative">
+                <span class="absolute -left-[29px] top-1.5 w-2.5 h-2.5 rounded-full bg-accent"></span>
+
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mb-2">
+                  <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white">
+                    Videogames and Multimedia Applications
+                  </h3>
+
+                  <span class="text-xs font-medium text-accent">
+                    2021 — 2024
+                  </span>
+                </div>
+
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-3">
+                  Bachelor's Degree </p>
+
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                  Learned how to create a game from the initial concept through to the final product and its marketing.
+                </p>
+              </div>
+
+            </div>
+            <br>
+            <div class="relative pl-6 border-l border-zinc-200 dark:border-zinc-700">
+
+              <div class="relative">
+                <span class="absolute -left-[29px] top-1.5 w-2.5 h-2.5 rounded-full bg-accent"></span>
+
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mb-2">
+                  <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white">
+                    Computer systems management and
+                    programming </h3>
+
+                  <span class="text-xs font-medium text-accent">
+                    2018 — 2021
+                  </span>
+                </div>
+
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-3">
+                  Vocational Course
+                </p>
+
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                  Learned the basic concepts of programming, computer systems, communication networks, and computer
+                  architecture
+                </p>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+
+        <!-- ═══ SKILLS ═══ -->
+        <div class="reveal d4">
+
+          <div class="flex items-center justify-between mb-6">
+            <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-widest">
+              Skills
+            </p>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+
+            <div class="px-4 py-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+              <span class="text-sm text-zinc-700 dark:text-zinc-300">Unity</span>
+            </div>
+
+            <div class="px-4 py-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+              <span class="text-sm text-zinc-700 dark:text-zinc-300">Unreal Engine</span>
+            </div>
+
+            <div class="px-4 py-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+              <span class="text-sm text-zinc-700 dark:text-zinc-300">C#</span>
+            </div>
+
+            <div class="px-4 py-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+              <span class="text-sm text-zinc-700 dark:text-zinc-300">UE Blueprints</span>
+            </div>
+
+            <div class="px-4 py-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+              <span class="text-sm text-zinc-700 dark:text-zinc-300">Git</span>
+            </div>
+
+            <div class="px-4 py-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+              <span class="text-sm text-zinc-700 dark:text-zinc-300">PS4 / PS5 SDK</span>
+            </div>
+
+            <div class="px-4 py-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+              <span class="text-sm text-zinc-700 dark:text-zinc-300">Nintendo Switch SDK</span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ═══ TESTIMONIALS ═══ -->
+    <!--
+<section id="reviews" class="py-24">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="mb-14">
+      <p class="reveal text-xs font-medium text-accent tracking-widest uppercase mb-3">Social proof</p>
+      <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-zinc-900 dark:text-white">What clients say</h2>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+
+      <blockquote class="reveal d1 bg-zinc-50 dark:bg-zinc-900 rounded-2xl p-7 border border-zinc-100 dark:border-zinc-800">
+        <div class="flex gap-0.5 mb-5" aria-label="5 stars">
+          <svg class="w-4 h-4 text-accent fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-4 h-4 text-accent fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-4 h-4 text-accent fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-4 h-4 text-accent fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-4 h-4 text-accent fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+        </div>
+        <p class="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed mb-6 italic">"Eliott delivered our redesign in record time and the quality blew us away. Our conversion rate jumped 28% in the first month. Absolutely recommend."</p>
+        <footer class="flex items-center gap-3">
+          <div class="pf w-10 h-10 rounded-full shrink-0"><img src="https://i.pravatar.cc/80?img=11" alt="Sarah Müller" loading="lazy"></div>
+          <div>
+            <p class="font-medium text-sm text-zinc-900 dark:text-white">Sarah Müller</p>
+            <p class="text-xs text-zinc-500">CPO, Novu</p>
+          </div>
+        </footer>
+      </blockquote>
+
+      <blockquote class="reveal d2 bg-zinc-900 dark:bg-zinc-800 rounded-2xl p-7 border border-zinc-800">
+        <div class="flex gap-0.5 mb-5" aria-label="5 stars">
+          <svg class="w-4 h-4 text-accent fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-4 h-4 text-accent fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-4 h-4 text-accent fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-4 h-4 text-accent fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-4 h-4 text-accent fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+        </div>
+        <p class="text-zinc-400 text-sm leading-relaxed mb-6 italic">"Working with Eliott is a dream. He asks the right questions, moves fast, and the final result always exceeds what we imagined. Our best hire of 2024."</p>
+        <footer class="flex items-center gap-3">
+          <div class="pf w-10 h-10 rounded-full shrink-0"><img src="https://i.pravatar.cc/80?img=52" alt="Thomas Renault" loading="lazy"></div>
+          <div>
+            <p class="font-medium text-sm text-white">Thomas Renault</p>
+            <p class="text-xs text-zinc-500">Founder, Finlo</p>
+          </div>
+        </footer>
+      </blockquote>
+
+      <blockquote class="reveal d3 bg-zinc-50 dark:bg-zinc-900 rounded-2xl p-7 border border-zinc-100 dark:border-zinc-800">
+        <div class="flex gap-0.5 mb-5" aria-label="5 stars">
+          <svg class="w-4 h-4 text-accent fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-4 h-4 text-accent fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-4 h-4 text-accent fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-4 h-4 text-accent fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-4 h-4 text-accent fill-current" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+        </div>
+        <p class="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed mb-6 italic">"We had a tight deadline and a vague brief. Eliott turned both into a polished site in under two weeks. Clean code, zero hand-holding needed."</p>
+        <footer class="flex items-center gap-3">
+          <div class="pf w-10 h-10 rounded-full shrink-0"><img src="https://i.pravatar.cc/80?img=47" alt="Camille Dufresne" loading="lazy"></div>
+          <div>
+            <p class="font-medium text-sm text-zinc-900 dark:text-white">Camille Dufresne</p>
+            <p class="text-xs text-zinc-500">Creative Director, Orea</p>
+          </div>
+        </footer>
+      </blockquote>
+
+    </div>
+  </div>
+</section>
+-->
+
+    <!-- ═══ BLOG ═══ -->
+    <!--
+<section id="blog" class="py-24 bg-zinc-50 dark:bg-zinc-900/40">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-14">
+      <div>
+        <p class="reveal text-xs font-medium text-accent tracking-widest uppercase mb-3">Thoughts</p>
+        <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-zinc-900 dark:text-white">From the blog</h2>
+      </div>
+      <a href="blog.html" class="reveal d1 text-sm font-medium text-zinc-500 dark:text-zinc-400 hover:text-accent transition-colors self-start sm:self-auto nl">All articles →</a>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+
+      <article class="reveal d1 card-h group bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800 hover:border-accent">
+        <div class="pf w-full h-44">
+          <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=700&q=80" alt="Why I ditched CSS frameworks" loading="lazy">
+        </div>
+        <div class="p-6">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="text-xs bg-orange-50 dark:bg-zinc-800 text-accent border border-orange-200 dark:border-zinc-700 px-2.5 py-1 rounded-full">Design</span>
+            <span class="text-xs text-zinc-400">Mar 8, 2025</span>
+          </div>
+          <a href="blog-article.html">
+            <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2 group-hover:text-accent transition-colors">Why I ditched heavy CSS frameworks for Tailwind</h3>
+          </a>
+          <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4">After years of fighting specificity wars, here's what finally convinced me to make the switch.</p>
+          <a href="blog-article.html" class="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-900 dark:text-white nl">Read more →</a>
+        </div>
+      </article>
+
+      <article class="reveal d2 card-h group bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800 hover:border-accent">
+        <div class="pf w-full h-44">
+          <img src="https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?w=700&q=80" alt="Design systems" loading="lazy">
+        </div>
+        <div class="p-6">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="text-xs bg-orange-50 dark:bg-zinc-800 text-accent border border-orange-200 dark:border-zinc-700 px-2.5 py-1 rounded-full">Dev</span>
+            <span class="text-xs text-zinc-400">Feb 21, 2025</span>
+          </div>
+          <a href="blog-article.html">
+            <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2 group-hover:text-accent transition-colors">Building a design system from scratch in a weekend</h3>
+          </a>
+          <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4">Tokens, components, docs - the process I follow to spin up a coherent system in 48 hours.</p>
+          <a href="blog-article.html" class="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-900 dark:text-white nl">Read more →</a>
+        </div>
+      </article>
+
+      <article class="reveal d3 card-h group bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800 hover:border-accent">
+        <div class="pf w-full h-44">
+          <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=700&q=80" alt="Freelance lessons" loading="lazy">
+        </div>
+        <div class="p-6">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="text-xs bg-orange-50 dark:bg-zinc-800 text-accent border border-orange-200 dark:border-zinc-700 px-2.5 py-1 rounded-full">Freelance</span>
+            <span class="text-xs text-zinc-400">Jan 14, 2025</span>
+          </div>
+          <a href="blog-article.html">
+            <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2 group-hover:text-accent transition-colors">5 lessons from my first year of full-time freelancing</h3>
+          </a>
+          <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4">Contracts, pricing, scope creep - the things nobody tells you before you go solo.</p>
+          <a href="blog-article.html" class="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-900 dark:text-white nl">Read more →</a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+-->
+
+    <!-- ═══ CONTACT ═══ -->
+
+    <section id="contact" class="py-24">
+      <div class="max-w-6xl mx-auto px-6">
+
+        <div class="bg-zinc-900 dark:bg-zinc-800 rounded-3xl p-10 md:p-16 relative overflow-hidden">
+
+          <div class="absolute top-0 right-0 w-64 h-64 bg-accent/20 rounded-full blur-3xl pointer-events-none"
+            aria-hidden="true">
+          </div>
+
+          <div class="absolute bottom-0 left-0 w-40 h-40 bg-accent/10 rounded-full blur-2xl pointer-events-none"
+            aria-hidden="true">
+          </div>
+
+          <div class="relative z-10 grid md:grid-cols-2 gap-12 items-start">
+
+            <!-- LEFT SIDE -->
+            <div>
+
+              <p class="reveal text-xs font-medium text-accent tracking-widest uppercase mb-3">
+                Get in touch
+              </p>
+
+              <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-white leading-tight mb-5">
+                Let's<br>work together
+              </h2>
+
+              <div class="reveal d3 flex flex-col gap-4">
+
+                <!-- EMAIL -->
+                <a href="mailto:alexsilva16294@gmail.com"
+                  class="group flex items-center gap-3 text-zinc-400 hover:text-white transition-colors">
+
+                  <span
+                    class="w-9 h-9 flex items-center justify-center bg-zinc-800 rounded-lg group-hover:bg-accent/20 transition-colors shrink-0">
+
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+
+                    </svg>
+                  </span>
+
+                  <span class="text-sm">
+                    alexsilva16294@gmail.com
+                  </span>
+
+                </a>
+
+
+                <!-- LINKEDIN -->
+                <a href="https://www.linkedin.com/in/alexandre-silva-0818792b3/" rel="noopener noreferrer"
+                  target="_blank"
+                  class="group flex items-center gap-3 text-zinc-400 hover:text-white transition-colors">
+
+                  <span
+                    class="w-9 h-9 flex items-center justify-center bg-zinc-800 rounded-lg group-hover:bg-accent/20 transition-colors shrink-0">
+
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+
+                      <path
+                        d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+
+                    </svg>
+
+                  </span>
+
+                  <span class="text-sm">
+                    Alexandre Silva
+                  </span>
+
+                </a>
+
+
+                <!-- GITHUB -->
+                <a href="https://github.com/AlexSilva23" rel="noopener noreferrer" target="_blank"
+                  class="group flex items-center gap-3 text-zinc-400 hover:text-white transition-colors">
+
+                  <span
+                    class="w-9 h-9 flex items-center justify-center bg-zinc-800 rounded-lg group-hover:bg-accent/20 transition-colors shrink-0">
+
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+
+                      <path
+                        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+
+                    </svg>
+
+                  </span>
+
+                  <span class="text-sm">
+                    github.com/AlexSilva23
+                  </span>
+
+                </a>
+
+              </div>
+            </div>
+
+
+            <!-- CONTACT FORM -->
+            <div class="reveal d2">
+
+              <form action="https://formspree.io/f/mbglydwj" method="POST" id="contact-form">
+
+                <div class="flex flex-col gap-4">
+
+                  <!-- NAME + EMAIL -->
+                  <div class="grid sm:grid-cols-2 gap-4">
+
+                    <div>
+
+                      <label for="fname" class="block text-xs font-medium text-zinc-400 mb-1.5">
+                        Name
+                        <span aria-hidden="true">*</span>
+                      </label>
+
+                      <input type="text" id="fname" name="name" placeholder="Chris Smith" required autocomplete="name"
+                        class="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-xl px-4 py-3 placeholder-zinc-600 focus:outline-none focus:border-accent transition-colors">
+
+                    </div>
+
+
+                    <div>
+
+                      <label for="femail" class="block text-xs font-medium text-zinc-400 mb-1.5">
+                        Email
+                        <span aria-hidden="true">*</span>
+                      </label>
+
+                      <input type="email" id="femail" name="email" placeholder="chris@example.com" required
+                        autocomplete="email"
+                        class="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-xl px-4 py-3 placeholder-zinc-600 focus:outline-none focus:border-accent transition-colors">
+
+                    </div>
+
+                  </div>
+
+
+                  <!-- SUBJECT -->
+                  <div>
+
+                    <label for="fsubject" class="block text-xs font-medium text-zinc-400 mb-1.5">
+                      Subject
+                    </label>
+
+                    <input type="text" id="fsubject" name="subject" placeholder="Project inquiry"
+                      class="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-xl px-4 py-3 placeholder-zinc-600 focus:outline-none focus:border-accent transition-colors">
+
+                  </div>
+
+
+                  <!-- MESSAGE -->
+                  <div>
+
+                    <label for="fmessage" class="block text-xs font-medium text-zinc-400 mb-1.5">
+                      Message
+                      <span aria-hidden="true">*</span>
+                    </label>
+
+                    <textarea id="fmessage" name="message" rows="4" placeholder="Tell me about your project..." required
+                      class="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-xl px-4 py-3 placeholder-zinc-600 focus:outline-none focus:border-accent transition-colors resize-none"></textarea>
+
+                  </div>
+
+
+                  <!-- SUCCESS MESSAGE -->
+                  <p id="form-success" class="hidden text-sm text-green-400">
+                    Message sent successfully!
+                  </p>
+
+
+                  <!-- ERROR MESSAGE -->
+                  <p id="form-error" class="hidden text-sm text-red-400">
+                    Something went wrong. Please try again.
+                  </p>
+
+
+                  <!-- SUBMIT -->
+                  <button type="submit" id="form-submit"
+                    class="shimmer w-full bg-accent text-white font-display font-bold text-sm py-3.5 rounded-xl hover:bg-accent-light transition-colors">
+
+                    Send message →
+
+                  </button>
+
+                </div>
+
+              </form>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- CONTACT FORM SCRIPT -->
+
+    <script>
+      const contactForm = document.getElementById("contact-form");
+      const submitButton = document.getElementById("form-submit");
+      const successMessage = document.getElementById("form-success");
+      const errorMessage = document.getElementById("form-error");
+
+      contactForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        successMessage.classList.add("hidden");
+        errorMessage.classList.add("hidden");
+
+        submitButton.disabled = true;
+        submitButton.textContent = "Sending...";
+
+        const formData = new FormData(contactForm);
+
+        try {
+          const response = await fetch(contactForm.action, {
+            method: "POST",
+            body: formData,
+            headers: {
+              Accept: "application/json"
+            }
+          });
+
+          if (response.ok) {
+            contactForm.reset();
+
+            successMessage.classList.remove("hidden");
+
+            submitButton.disabled = false;
+            submitButton.textContent = "Message sent ✓";
+          } else {
+            throw new Error("Form submission failed");
+          }
+
+        } catch (error) {
+
+          errorMessage.classList.remove("hidden");
+
+          submitButton.disabled = false;
+          submitButton.textContent = "Send message →";
+        }
+      });
+    </script>
+
+
+  </main>
+
+  <footer class="border-t border-zinc-100 dark:border-zinc-900">
+    <div class="max-w-6xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="text-sm text-zinc-400">© <span id="yr"></span> Alexandre Silva. All rights reserved. <br> Developed by
+        <a href="https://lbegey78.gumroad.com/" target="_blank" class="font-bold">Laurent Begey</a> • Distributed by <a
+          href="https://themewagon.com/" target="_blank" class="font-bold">ThemeWagon</a>
+      </p>
+      <p class="text-xs text-zinc-500">Built with
+        <a href="https://tailwindcss.com" rel="noopener noreferrer" target="_blank"
+          class="hover:text-accent transition-colors">Tailwind CSS</a>
+        &amp;
+        <a href="https://alpinejs.dev" rel="noopener noreferrer" target="_blank"
+          class="hover:text-accent transition-colors">Alpine.js</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    function app() {
+      return {
+        dark: false,
+        mm: false,
+        sc: false,
+        s: 'hero',
+
+        init() {
+          // dark mode
+          this.dark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          this.$watch('dark', v => localStorage.setItem('theme', v ? 'dark' : 'light'));
+
+          // scroll
+          window.addEventListener('scroll', () => {
+            this.sc = window.scrollY > 20;
+            this.updateSection();
+          }, { passive: true });
+
+          // reveal
+          const io = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+          }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+          document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+          // year
+          document.getElementById('yr').textContent = new Date().getFullYear();
+        },
+
+        updateSection() {
+          const atBottom = (window.innerHeight + window.scrollY) >= document.body.scrollHeight - 60;
+          if (atBottom) { this.s = 'contact'; return; }
+          const ids = ['contact', 'blog', 'reviews', 'about', 'work', 'services', 'hero'];
+          for (const id of ids) {
+            const el = document.getElementById(id);
+            if (el && window.scrollY >= el.offsetTop - 130) { this.s = id; return; }
+          }
+        }
+      }
+    }
+  </script>
 
 </body>
 
