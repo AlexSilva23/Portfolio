@@ -26,8 +26,8 @@
       darkMode: 'class',
       theme: {
         extend: {
-          fontFamily: { display: ['PT Sans', 'sans-serif'], body: ['DM Sans', 'sans-serif'] },
-          colors: { accent: '#0080FE', 'accent-light': '#005eb1' }
+          fontFamily: {display: ['PT Sans', 'sans-serif'], body: ['DM Sans', 'sans-serif']},
+          colors: {accent: '#0080FE', 'accent-light': '#005eb1'}
         }
       }
     }
@@ -441,7 +441,7 @@
                 <span
                   class="text-xs bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">Port</span>
               </div>
-              <a href="/projectPages/pocket-mirror-port.html">
+              <a href="projectPages/pocket-mirror-port.html">
                 <h3 class="font-display font-bold text-2xl text-zinc-900 dark:text-white mb-2">Pocket Mirror ~
                   GoldenerTraum (port)</h3>
               </a>
@@ -461,7 +461,7 @@
                 to support the remaining game content. After conversion, I tested each room against the original game,
                 fixing
                 issues either through custom code or by adjusting the generated graphs.</p>
-              <a href="/projectPages/pocket-mirror-port.html"
+              <a href="projectPages/pocket-mirror-port.html"
                 class="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-900 dark:text-white nl">View in
                 detail <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                   aria-hidden="true">
@@ -1182,12 +1182,12 @@
           window.addEventListener('scroll', () => {
             this.sc = window.scrollY > 20;
             this.updateSection();
-          }, { passive: true });
+          }, {passive: true});
 
           // reveal
           const io = new IntersectionObserver(entries => {
-            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-          }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+            entries.forEach(e => {if (e.isIntersecting) {e.target.classList.add('in'); io.unobserve(e.target);} });
+          }, {threshold: 0.1, rootMargin: '0px 0px -40px 0px'});
           document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
           // year
@@ -1196,11 +1196,11 @@
 
         updateSection() {
           const atBottom = (window.innerHeight + window.scrollY) >= document.body.scrollHeight - 60;
-          if (atBottom) { this.s = 'contact'; return; }
+          if (atBottom) {this.s = 'contact'; return;}
           const ids = ['contact', 'blog', 'reviews', 'about', 'work', 'services', 'hero'];
           for (const id of ids) {
             const el = document.getElementById(id);
-            if (el && window.scrollY >= el.offsetTop - 130) { this.s = id; return; }
+            if (el && window.scrollY >= el.offsetTop - 130) {this.s = id; return;}
           }
         }
       }
